@@ -43,9 +43,3 @@ subdir('mpc2sv8')
 subdir('mpccut')
 subdir('mpcchap')
 subdir('wavcmp')
-
-libmpcdec_dep = declare_dependency(
-	link_with: libmpcdec,
-	include_directories: includes,
-	version: meson.project_version()
-)

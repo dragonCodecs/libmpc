@@ -22,3 +22,16 @@ libmpcdec = library(
 	install: true,
 	version: meson.project_version()
 )
+
+libraryType = get_option('default_library')
+libmpcdecArgs = []
+if libraryType != 'static'
+	libmpcdecArgs += '-DMPC_DLL_IMPORT'
+endif
+
+libmpcdec_dep = declare_dependency(
+	compile_args: libmpcdecArgs,
+	link_with: libmpcdec,
+	include_directories: includes,
+	version: meson.project_version()
+)

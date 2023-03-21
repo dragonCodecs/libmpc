@@ -4,8 +4,8 @@ mpccut = executable(
 	'mpccut',
 	['mpccut.c'],
 	include_directories: [includes] + extraIncs,
-	link_with: [common, libmpcdec, libmpcenc] + extraLibs,
-	dependencies: [maths],
+	link_with: [common, libmpcenc] + extraLibs,
+	dependencies: [maths, libmpcdec_dep],
 	gnu_symbol_visibility: 'inlineshidden',
 	install: true
 )

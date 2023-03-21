@@ -4,8 +4,8 @@ mpcgain = executable(
 	'mpcgain',
 	['mpcgain.c'],
 	include_directories: [includes] + extraIncs,
-	link_with: [common, libmpcdec] + extraLibs,
-	dependencies: [maths, libreplaygain],
+	link_with: [common] + extraLibs,
+	dependencies: [maths, libreplaygain, libmpcdec_dep],
 	gnu_symbol_visibility: 'inlineshidden',
 	install: true
 )
