@@ -16,5 +16,6 @@ libmpcenc = static_library(
 	link_with: [common],
 	dependencies: [maths],
 	gnu_symbol_visibility: 'inlineshidden',
+	name_prefix: '',
 	install: true
 )

@@ -19,6 +19,7 @@ libmpcdec = library(
 	link_with: [common],
 	dependencies: [maths],
 	gnu_symbol_visibility: 'inlineshidden',
+	name_prefix: '',
 	install: true,
 	version: meson.project_version()
 )
