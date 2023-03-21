@@ -9,12 +9,18 @@ mpcencSrcs = [
 	'winmsg.c',
 ]
 
+mpcencDeps = []
+if isWindows
+	libWinMM = c.find_library('winmm')
+	mpcencDeps += libWinMM
+endif
+
 mpcenc = executable(
 	'mpcenc',
 	mpcencSrcs,
 	include_directories: [includes, libmpcencInc, libmpcpsyInc] + extraIncs,
 	link_with: [common, libmpcenc, libmpcpsy] + extraLibs,
-	dependencies: [maths],
+	dependencies: [maths] + mpcencDeps,
 	gnu_symbol_visibility: 'inlineshidden',
 	install: true
 )
