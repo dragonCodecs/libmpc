@@ -14,6 +14,7 @@ libmpcdecSrcs = [
 libmpcdec = library(
 	'libmpcdec',
 	libmpcdecSrcs,
+	c_args: '-DDLL_EXPORT',
 	include_directories: includes,
 	link_with: [common],
 	dependencies: [maths],
