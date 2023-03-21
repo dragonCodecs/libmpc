@@ -125,11 +125,12 @@ enum {
 
 /* DLL building support on win32 hosts */
 #ifndef MPC_API
-#   ifdef DLL_EXPORT      /* defined by libtool (if required) */
-#       define MPC_API __declspec(dllexport)
-#   endif
-#   ifdef MPC_DLL_IMPORT  /* define if linking with this dll */
-#       define MPC_API __declspec(dllimport)
+#   ifdef _WIN32
+#       ifdef DLL_EXPORT      /* defined by libtool (if required) */
+#           define MPC_API __declspec(dllexport)
+#       elif MPC_DLL_IMPORT
+#           define MPC_API __declspec(dllimport)
+#       endif
 #   endif
 #   ifndef MPC_API     /* static linking or !_WIN32 */
 #     if defined(__GNUC__) && (__GNUC__ >= 4)
