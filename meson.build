@@ -24,7 +24,7 @@ libcuefile = subproject(
 	'libcuefile_dep'
 )
 
-if cxx.get_id() == 'msvc'
+if c.get_id() == 'msvc'
 	add_project_arguments('-D_CRT_SECURE_NO_WARNINGS', language: 'c')
 endif
 
