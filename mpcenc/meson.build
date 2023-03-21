@@ -12,8 +12,8 @@ mpcencSrcs = [
 mpcenc = executable(
 	'mpcenc',
 	mpcencSrcs,
-	include_directories: [includes, libmpcencInc, libmpcpsyInc],
-	link_with: [common, libmpcenc, libmpcpsy],
+	include_directories: [includes, libmpcencInc, libmpcpsyInc] + extraIncs,
+	link_with: [common, libmpcenc, libmpcpsy] + extraLibs,
 	dependencies: [maths],
 	gnu_symbol_visibility: 'inlineshidden',
 	install: true

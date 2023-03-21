@@ -10,6 +10,7 @@ project(
 
 c = meson.get_compiler('c')
 maths = c.find_library('m', required: false)
+isWindows = target_machine.system() == 'windows'
 
 libreplaygain = subproject(
 	'libreplaygain',
@@ -23,8 +24,14 @@ libcuefile = subproject(
 	'libcuefile_dep'
 )
 
+extraIncs = []
+extraLibs = []
+
 subdir('include')
 subdir('common')
+if isWindows
+	subdir('win32')
+endif
 subdir('libmpcdec')
 subdir('libmpcpsy')
 subdir('libmpcenc')
