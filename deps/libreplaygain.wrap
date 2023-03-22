@@ -1,4 +1,4 @@
 [wrap-git]
-url = git@github.com:dragonmux/libreplaygain
+url = https://github.com/dragonCodecs/libreplaygain
 revision = head
 clone-recursive = false
