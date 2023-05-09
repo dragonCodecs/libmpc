@@ -7,9 +7,15 @@ win32Srcs = [
 ]
 win32Inc = include_directories('.')
 
+win32Args = []
+if isWindows and c.get_define('_MSC_VER') == ''
+	win32Args += ['-DUNIXEM_FORCE_ANY_COMPILER']
+endif
+
 win32Lib = static_library(
 	'win32',
 	win32Srcs,
+	c_args: win32Args,
 	include_directories: includes,
 	gnu_symbol_visibility: 'inlineshidden',
 	install: true
