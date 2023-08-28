@@ -218,9 +218,10 @@ void _Huffman_PrintCodes(huff_sym_t * sym, unsigned int num_symbols, int print_t
 			qsort(sym, num_symbols, sizeof(huff_sym_t),
 				  (int (*)(const void *, const void *)) _Huffman_CompBits);
 			printf("{\n	");
-			for( i = num_symbols - 1; i >= 0; i--) {
-				printf("{0x%.8x, %u, %i}", sym[i].Code << (32 - sym[i].Bits), sym[i].Bits, sym[i].Symbol - offset);
-				if (i != 0)
+			for( i = num_symbols; i > 0; i--) {
+				const unsigned int index = i - 1U;
+				printf("{0x%.8x, %u, %i}", sym[index].Code << (32 - sym[index].Bits), sym[index].Bits, sym[index].Symbol - offset);
+				if (index != 0)
 					printf(", ");
 			}
 			printf("\n}\n");
@@ -229,8 +230,9 @@ void _Huffman_PrintCodes(huff_sym_t * sym, unsigned int num_symbols, int print_t
 			qsort(sym, num_symbols, sizeof(huff_sym_t),
 				  (int (*)(const void *, const void *)) _Huffman_CompBits);
 			printf("{\n	");
-			for( i = num_symbols - 1; i >= 0; i--) {
-				int symbol =  sym[i].Symbol;
+			for( i = num_symbols; i > 0; i--) {
+				const unsigned int index = i - 1U;
+				int symbol =  sym[index].Symbol;
 				packs[3] = symbol / (offset * offset * offset);
 				packs[2] = (symbol - packs[3] * offset * offset * offset) / (offset * offset);
 				packs[1] = (symbol - (packs[3] * offset + packs[2]) * offset * offset) / offset;
@@ -240,8 +242,8 @@ void _Huffman_PrintCodes(huff_sym_t * sym, unsigned int num_symbols, int print_t
 				packs[2] -= offset >> 1;
 				packs[3] -= offset >> 1;
 				symbol = ((packs[3] & 15) << 12) | ((packs[2] & 15) << 8) | ((packs[1] & 15) << 4) | (packs[0] & 15);
-				printf("{0x%.8x, %u, %i}", sym[i].Code << (32 - sym[i].Bits), sym[i].Bits, symbol);
-				if (i != 0)
+				printf("{0x%.8x, %u, %i}", sym[index].Code << (32 - sym[index].Bits), sym[index].Bits, symbol);
+				if (index != 0)
 					printf(", ");
 			}
 			printf("\n}\n");
@@ -276,5 +278,3 @@ void _Huffman_PrintCodes(huff_sym_t * sym, unsigned int num_symbols, int print_t
 }
 
 #endif
-
-
