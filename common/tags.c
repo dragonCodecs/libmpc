@@ -629,13 +629,13 @@ IsUnicode ( const char* src, size_t len )
     if ( len & 1 )                                              // odd number of bytes?
         return 0;
 
-	if ( src [0] != (char)0xFF  ||  src [1] != (char)0xFE )     // Microsoft Unicode preample (also useful to detect endianess, but currently only little endian is supported)
+    if ( src [0] != (char)0xFF  ||  src [1] != (char)0xFE )     // Microsoft Unicode preample (also useful to detect endianess, but currently only little endian is supported)
         return 0;
 
     for ( len >>= 1; len > 0; len--, src += 2 ) {               // Check for invalid codes (FFFE, FFFF, DC00...DFFF without a prepend D800...DBFF, D800...DBFF without a n appended DC00...DFFF)
         if ( ( src [1] & 0xFC ) == 0xDC )
             return 0;
-		if ( src [1] == (char)0xFF  &&  ( src [0] & 0xFE ) == 0xFE )
+        if ( src [1] == (char)0xFF  &&  ( src [0] & 0xFE ) == 0xFE )
             return 0;
         if ( ( src [1] & 0xFC ) == 0xD8 ) {
             if ( len < 2  ||  ( src [3] & 0xFC ) != 0xDC )
@@ -737,7 +737,7 @@ addtag ( const char*           key,             // the item key
 
     p = malloc ( keylen );
     memcpy ( p, key, keylen );
-	T [TagCount] . key    = (char*) p;
+    T [TagCount] . key    = (char*) p;
     T [TagCount] . keylen = keylen;
 
     switch ( converttoutf8 ) {
@@ -854,14 +854,14 @@ FinalizeTags ( FILE* fp, unsigned int Version, unsigned int flags )
     if ( TagCount == 0 )
         return 0;
 
-	if (flags & TAG_NO_PREAMBLE) {
-		estimatedbytes -= 8;
-		writtenbytes += 8;
-	}
-	if (flags & TAG_NO_FOOTER)
-		estimatedbytes = 0;
-	if (flags & TAG_NO_HEADER)
-		writtenbytes = 0;
+    if (flags & TAG_NO_PREAMBLE) {
+        estimatedbytes -= 8;
+        writtenbytes += 8;
+    }
+    if (flags & TAG_NO_FOOTER)
+        estimatedbytes = 0;
+    if (flags & TAG_NO_HEADER)
+        writtenbytes = 0;
 
     qsort ( T, TagCount, sizeof (*T), cmpfn2 );
 
@@ -885,12 +885,12 @@ FinalizeTags ( FILE* fp, unsigned int Version, unsigned int flags )
     H [19] = TagCount >> 24;
 
     H [23] = 0x80 | 0x20;
-	if (!(flags & TAG_NO_HEADER)) {
-		if (flags & TAG_NO_PREAMBLE)
-			writtenbytes += fwrite ( H + 8, 1, 24, fp );
-		else
-    		writtenbytes += fwrite ( H, 1, 32, fp );
-	}
+    if (!(flags & TAG_NO_HEADER)) {
+        if (flags & TAG_NO_PREAMBLE)
+            writtenbytes += fwrite ( H + 8, 1, 24, fp );
+        else
+            writtenbytes += fwrite ( H, 1, 32, fp );
+    }
 
     for ( i = 0; i < TagCount; i++ ) {
         dw [0] = T [i] . valuelen >>  0;
@@ -909,15 +909,15 @@ FinalizeTags ( FILE* fp, unsigned int Version, unsigned int flags )
     }
 
     H [23] = 0x80;
-	if (!(flags & TAG_NO_FOOTER)) {
-		if (flags & TAG_NO_PREAMBLE)
-			writtenbytes += fwrite ( H + 8, 1, 24, fp );
-		else
-			writtenbytes += fwrite ( H, 1, 32, fp );
-	}
+    if (!(flags & TAG_NO_FOOTER)) {
+        if (flags & TAG_NO_PREAMBLE)
+            writtenbytes += fwrite ( H + 8, 1, 24, fp );
+        else
+            writtenbytes += fwrite ( H, 1, 32, fp );
+    }
 
     if ( estimatedbytes != writtenbytes )
-		fprintf (stderr, "\nError writing APE tag.\n" );
+        fprintf (stderr, "\nError writing APE tag.\n" );
 
     TagCount = 0;
     return 0;
@@ -966,7 +966,7 @@ CopyTags_ID3 ( FILE* fp )
     if ( -1 == fseek ( fp, -128L, SEEK_END ) )
         return -1;
 
-	if ( 128 != fread(tmp, 1, 128, fp) )
+    if ( 128 != fread(tmp, 1, 128, fp) )
         return -1;
 
     if ( 0 != memcmp ( tmp, "TAG", 3 ) ) {
@@ -976,11 +976,11 @@ CopyTags_ID3 ( FILE* fp )
     if ( !tmp[3]  &&  !tmp[33]  &&  !tmp[63]  &&  !tmp[93]  &&  !tmp[97] )
         return -1;
 
-	memcpy_crop  ( "Title"  , (char*)tmp +  3, 30, 0 );
-	memcpy_crop  ( "Artist" , (char*)tmp + 33, 30, 0 );
-	memcpy_crop  ( "Album"  , (char*)tmp + 63, 30, 0 );
-	memcpy_crop  ( "Year"   , (char*)tmp + 93,  4, 0 );
-	memcpy_crop  ( "Comment", (char*)tmp + 97, 30, 0 );
+    memcpy_crop  ( "Title"  , (char*)tmp +  3, 30, 0 );
+    memcpy_crop  ( "Artist" , (char*)tmp + 33, 30, 0 );
+    memcpy_crop  ( "Album"  , (char*)tmp + 63, 30, 0 );
+    memcpy_crop  ( "Year"   , (char*)tmp + 93,  4, 0 );
+    memcpy_crop  ( "Comment", (char*)tmp + 97, 30, 0 );
 
     if ( tmp[127] < sizeof(GenreList)/sizeof(*GenreList) )
         if ( ! TagKeyExists ( "Genre", 0 ) )
@@ -988,8 +988,8 @@ CopyTags_ID3 ( FILE* fp )
 
     if ( tmp[125] == 0  &&  tmp[126] != 0 )
         if ( ! TagKeyExists ( "Track", 0 ) ) {
-		sprintf ( (char*)tmp, "%u",  tmp[126] );
-		addtag ("Track", 0, (char*)tmp, strlen ((char*)tmp), 0, 0 );
+            sprintf ( (char*)tmp, "%u",  tmp[126] );
+            addtag ("Track", 0, (char*)tmp, strlen ((char*)tmp), 0, 0 );
         }
 
     return 0;
@@ -1021,7 +1021,7 @@ CopyTags_APE ( FILE* fp )
 
     if ( -1 == fseek ( fp, -(long)sizeof T, SEEK_END ) )
         return -1;
-	if ( sizeof(T) != fread  (&T, 1, sizeof T, fp) )
+    if ( sizeof(T) != fread  (&T, 1, sizeof T, fp) )
         return -1;
     if ( memcmp ( T.ID, "APETAGEX", sizeof(T.ID) ) != 0 )
         return -1;
@@ -1041,10 +1041,11 @@ CopyTags_APE ( FILE* fp )
     for ( p = buff; TagCount--; ) {
         len   = Read_LE_Uint32 ( p );        p += 4;
         flags = Read_LE_Uint32 ( p );        p += 4;
-		strcpy ( (char*)key, (char*)p );                   p += strlen ((char*)key) + 1;
-		if ( ! TagKeyExists ( (char*)key, 0 ) )
-			addtag ( (char*)key, 0, (char*)p, len > 0  &&  p [len-1] == '\0'  ?  len-1  :  len, version >= 2000  ?  0  :  5, flags );
-                                             p += len;
+        strcpy ( (char*)key, (char*)p );
+        p += strlen ((char*)key) + 1;
+        if ( ! TagKeyExists ( (char*)key, 0 ) )
+            addtag ( (char*)key, 0, (char*)p, len > 0  &&  p [len-1] == '\0'  ?  len-1  :  len, version >= 2000  ?  0  :  5, flags );
+        p += len;
     }
 
     return 0;
@@ -1084,6 +1085,7 @@ CopyTags_APE ( FILE* fp )
 
 */
 
+#if 0
 static const char* const  parser_strings [] = {
     "/A_Tx",
     "/A/Tx",
@@ -1098,6 +1100,7 @@ static const char* const  parser_strings [] = {
     "/A/C N_0x",
     "/A/C_0x",
 };
+#endif
 
 /*
  *    dst[0] = Artist
