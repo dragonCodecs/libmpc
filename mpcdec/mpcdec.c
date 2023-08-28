@@ -78,7 +78,7 @@ t_wav_uint32 mpc_wav_output_seek(void* p_user_data, t_wav_uint32 p_position)
 
 static short bswap_16(short in)
 {
-	return (in << 8) | ((in >> 8) & 0xFF);
+	return (in << 8U) | ((in >> 8U) & 0xFFU);
 }
 
 #ifdef MPC_FIXED_POINT
@@ -102,12 +102,12 @@ static int raw_output_float32(FILE * file, float * buff, int cnt, mpc_bool_t rev
 {
 	int i;
 	for (i = 0; i < cnt; i++) {
-		int tmp = nearbyintf(buff[i] * (1 << 15));
+		int tmp = nearbyintf(buff[i] * (1U << 15U));
 		short out;
-		if (tmp > ((1 << 15) - 1))
-			tmp = ((1 << 15) - 1);
-		if (tmp < -(1 << 15))
-			tmp = -(1 << 15);
+		if (tmp > ((1U << 15U) - 1U))
+			tmp = ((1U << 15U) - 1U);
+		if (tmp < -(int)(1U << 15U))
+			tmp = -(int)(1U << 15U);
 		if (reverse_endian)
 			tmp = bswap_16((short) tmp);
 		out = (short)tmp;
@@ -137,10 +137,10 @@ static void print_info(mpc_streaminfo * info, char * filename)
 	fprintf(stderr, "channels: %d\n", info->channels);
 	fprintf(stderr, "length: %d:%.2d (%u samples)\n", minutes, seconds, (mpc_uint32_t)mpc_streaminfo_get_length_samples(info));
 	fprintf(stderr, "file size: %d Bytes\n", info->total_file_length);
-	fprintf(stderr, "track peak: %2.2f dB\n", info->peak_title / 256.f);
-	fprintf(stderr, "track gain: %2.2f dB / %2.2f dB\n", info->gain_title / 256.f, info->gain_title == 0 ? 0 : 64.82f - info->gain_title / 256.f);
-	fprintf(stderr, "album peak: %2.2f dB\n", info->peak_album / 256.f);
-	fprintf(stderr, "album gain: %2.2f dB / %2.2f dB\n", info->gain_album / 256.f, info->gain_album == 0 ? 0 : 64.82f - info->gain_album / 256.f);
+	fprintf(stderr, "track peak: %2.2f dB\n", (float)info->peak_title / 256.F);
+	fprintf(stderr, "track gain: %2.2f dB / %2.2f dB\n", (float)info->gain_title / 256.F, info->gain_title == 0 ? 0 : 64.82F - (float)info->gain_title / 256.F);
+	fprintf(stderr, "album peak: %2.2f dB\n", (float)info->peak_album / 256.F);
+	fprintf(stderr, "album gain: %2.2f dB / %2.2f dB\n", (float)info->gain_album / 256.F, info->gain_album == 0 ? 0 : 64.82F - (float)info->gain_album / 256.F);
 	fprintf(stderr, "\n");
 
 }
@@ -169,7 +169,8 @@ main(int argc, char **argv)
 	mpc_bool_t info = MPC_FALSE, is_wav_output = MPC_FALSE, check = MPC_FALSE;
 	mpc_bool_t is_raw_output = MPC_FALSE, reverse_endian = MPC_FALSE;
     MPC_SAMPLE_FORMAT sample_buffer[MPC_DECODER_BUFFER_LENGTH];
-    clock_t begin, end, sum; int total_samples;
+    clock_t begin, end, sum;
+	int total_samples;
 	t_wav_output_file wav_output;
 	t_wav_output_file_callback wavo_fc;
 	int c;
@@ -225,7 +226,7 @@ main(int argc, char **argv)
 	} else if (argc - optind > 1 && is_raw_output == MPC_FALSE) {
 		is_wav_output = MPC_TRUE;
 	};
-	
+
     if (is_wav_output || is_raw_output)
     {
         memset(&wav_output, 0, sizeof wav_output);
@@ -238,7 +239,7 @@ main(int argc, char **argv)
 			wavo_fc.m_user_data = fopen(argv[optind + 1], "wb");
         if(!wavo_fc.m_user_data)
 			return !MPC_STATUS_OK;
-		
+
 		if (is_wav_output) {
 			if (!waveformat_output_open(&wav_output, wavo_fc, si.channels, 16, 0, si.sample_freq, (t_wav_uint32) si.samples * si.channels))
 				return !MPC_STATUS_OK;
@@ -274,9 +275,9 @@ main(int argc, char **argv)
 #endif
 			if (is_wav_output) {
 #ifdef MPC_FIXED_POINT
-				if(waveformat_output_process_int16(&wav_output, tmp_buff, frame.samples * si.channels) < 0)
+				if(waveformat_output_process_int16(&wav_output, tmp_buff, frame.samples * si.channels) == 0)
 #else
-				if(waveformat_output_process_float32(&wav_output, sample_buffer, frame.samples * si.channels) < 0)
+				if(waveformat_output_process_float32(&wav_output, sample_buffer, frame.samples * si.channels) == 0)
 #endif
 					break;
 			}
