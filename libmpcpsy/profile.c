@@ -55,11 +55,11 @@ typedef struct {
 
 
 static const Profile_Setting_t  Profiles [16] = {
-	{ 0 },
-	{ 0 },
-	{ 0 },
-	{ 0 },
-	{ 0 },
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 	/*    Short   MinVal  EarModel  Ltq_                min   Ltq_  Band-  tmpMask  CVD_  varLtq    MS   Comb   NS_        Trans */
 	/*    Thr     Choice  Flag      offset  TMN   NMT   SMR   max   Width  _used    used         channel Penal used  PNS    Det  */
 	{ 1.e9f,  1,      300,       30,    3.0, -1.0,    0,  106,   4820,   1,      1,    1.,      3,     24,  6,   1.09f, 200 },  // 0: pre-Telephone
@@ -138,4 +138,3 @@ void SetQualityParams (PsyModel * m, float qual )
 	m->PNS            = Profiles [i].PNS        * (1-mix) + Profiles [i+1].PNS        * mix;
 	m->TransDetect    = Profiles [i].TransDetect* (1-mix) + Profiles [i+1].TransDetect* mix;
 }
-
