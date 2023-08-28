@@ -299,14 +299,23 @@ writeBitstream_SV8 ( mpc_encoder_t* e, int MaxBand)
 
 	/*********************************** Samples *********************************/
 	for ( n = 0; n < MaxBand; n++ ) {
-		int Res = Res_L[n];
+		mpc_int32_t Res = Res_L[n];
 		const mpc_int16_t * q = e->Q[n].L;
 		static const unsigned int thres[] = {0, 0, 3, 7, 9, 1, 3, 4, 8};
-		static const int HuffQ2_var[5*5*5] =
-		{6, 5, 4, 5, 6, 5, 4, 3, 4, 5, 4, 3, 2, 3, 4, 5, 4, 3, 4, 5, 6, 5, 4, 5, 6, 5, 4, 3, 4, 5, 4, 3, 2, 3, 4, 3, 2, 1, 2, 3, 4, 3, 2, 3, 4, 5, 4, 3, 4, 5, 4, 3, 2, 3, 4, 3, 2, 1, 2, 3, 2, 1, 0, 1, 2, 3, 2, 1, 2, 3, 4, 3, 2, 3, 4, 5, 4, 3, 4, 5, 4, 3, 2, 3, 4, 3, 2, 1, 2, 3, 4, 3, 2, 3, 4, 5, 4, 3, 4, 5, 6, 5, 4, 5, 6, 5, 4, 3, 4, 5, 4, 3, 2, 3, 4, 5, 4, 3, 4, 5, 6, 5, 4, 5, 6};
+		static const mpc_uint8_t HuffQ2_var[5*5*5] = {
+			6, 5, 4, 5, 6, 5, 4, 3, 4, 5, 4, 3, 2, 3, 4, 5,
+			4, 3, 4, 5, 6, 5, 4, 5, 6, 5, 4, 3, 4, 5, 4, 3,
+			2, 3, 4, 3, 2, 1, 2, 3, 4, 3, 2, 3, 4, 5, 4, 3,
+			4, 5, 4, 3, 2, 3, 4, 3, 2, 1, 2, 3, 2, 1, 0, 1,
+			2, 3, 2, 1, 2, 3, 4, 3, 2, 3, 4, 5, 4, 3, 4, 5,
+			4, 3, 2, 3, 4, 3, 2, 1, 2, 3, 4, 3, 2, 3, 4, 5,
+			4, 3, 4, 5, 6, 5, 4, 5, 6, 5, 4, 3, 4, 5, 4, 3,
+			2, 3, 4, 5, 4, 3, 4, 5, 6, 5, 4, 5, 6
+		};
 
 		do {
-			int k = 0, idx = 1, cnt = 0, sng;
+			mpc_uint_t idx = 1U;
+			int k = 0;
 			switch ( Res ) {
 				case -1:
 				case  0:
@@ -315,18 +324,20 @@ writeBitstream_SV8 ( mpc_encoder_t* e, int MaxBand)
 					Table = HuffQ [0][0];
 					for( ; k < 36; ){
 						int kmax = k + 18;
-						cnt = 0, sng = 0;
+						mpc_uint_t sng = 0;
+						mpc_uint_t cnt = 0;
 						for ( ; k < kmax; k++) {
-							idx <<= 1;
+							idx <<= 1U;
 							if (q[k] != 1) {
 								cnt++;
-								idx |= 1;
-								sng = (sng << 1) | (q[k] >> 1);
+								idx |= 1U;
+								sng = (sng << 1U) | (q[k] >> 1U);
 							}
 						}
 						writeBits(e, Table[cnt].Code, Table[cnt].Length);
-						if (cnt > 0) {
-							if (cnt > 9) idx = ~idx;
+						if (cnt > 0U) {
+							if (cnt > 9U)
+								idx = ~idx;
 							encodeEnum(e, idx, 18);
 							writeBits(e, sng, cnt);
 						}
@@ -337,17 +348,17 @@ writeBitstream_SV8 ( mpc_encoder_t* e, int MaxBand)
 					Tables[1] = HuffQ [1][1];
 					idx = 2 * thres[Res];
 					for ( ; k < 36; k += 3) {
-						int tmp = q[k] + 5*q[k+1] + 25*q[k+2];
+						mpc_uint32_t tmp = q[k] + 5U*q[k+1] + 25U*q[k+2];
 						writeBits ( e, Tables[idx > thres[Res]][tmp].Code,
 									Tables[idx > thres[Res]][tmp].Length );
-						idx = (idx >> 1) + HuffQ2_var[tmp];
+						idx = (idx >> 1U) + HuffQ2_var[tmp];
 					}
 					break;
 				case  3:
 				case  4:
 					Table = HuffQ [0][Res - 1];
 					for ( ; k < 36; k += 2 ) {
-						int tmp = q[k] + thres[Res]*q[k+1];
+						mpc_uint32_t tmp = q[k] + thres[Res]*q[k+1];
 						writeBits ( e, Table[tmp].Code, Table[tmp].Length );
 					}
 					break;
@@ -359,19 +370,20 @@ writeBitstream_SV8 ( mpc_encoder_t* e, int MaxBand)
 					Tables[1] = HuffQ [1][Res - 1];
 					idx = 2 * thres[Res];
 					for ( ; k < 36; k++ ) {
-						int tmp = q[k] - (1 << (Res - 2)) + 1;
+						mpc_uint32_t tmp = q[k] - (1U << (Res - 2U)) + 1U;
 						writeBits ( e, Tables[idx > thres[Res]][q[k]].Code,
 									Tables[idx > thres[Res]][q[k]].Length );
-						if (tmp < 0) tmp = -tmp;
-						idx = (idx >> 1) + tmp;
+						if (tmp & 0x80000000U)
+							tmp = (~tmp) + 1U;
+						idx = (idx >> 1U) + tmp;
 					}
 					break;
 				default:
 					for ( ; k < 36; k++ ) {
-						writeBits ( e, HuffQ9up[q[k] >> (Res - 9)].Code,
-									HuffQ9up[q[k] >> (Res - 9)].Length );
+						writeBits ( e, HuffQ9up[q[k] >> (Res - 9U)].Code,
+									HuffQ9up[q[k] >> (Res - 9U)].Length );
 						if (Res != 9)
-							writeBits ( e, q[k] & ((1 << (Res - 9)) - 1), Res - 9);
+							writeBits ( e, q[k] & ((1U << (Res - 9U)) - 1U), Res - 9U);
 					}
 					break;
 			}
@@ -381,8 +393,8 @@ writeBitstream_SV8 ( mpc_encoder_t* e, int MaxBand)
 	}
 
 	e->framesInBlock++;
-	if (e->framesInBlock == (1 << e->frames_per_block_pwr)) {
-		if ((e->block_cnt & ((1 << e->seek_pwr) - 1)) == 0) {
+	if (e->framesInBlock == (1U << e->frames_per_block_pwr)) {
+		if ((e->block_cnt & ((1U << e->seek_pwr) - 1U)) == 0) {
 			e->seek_table[e->seek_pos] = ftell(e->outputFile);
 			e->seek_pos++;
 		}
