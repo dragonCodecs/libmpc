@@ -140,7 +140,7 @@ static float  NoiseInjectionCompensation2D [18] [32] = {
 void
 NoiseInjectionComp ( void )
 {
-    int  i;
+    size_t  i;
 
     for ( i = 0; i < sizeof(NoiseInjectionCompensation1D)/sizeof(*NoiseInjectionCompensation1D); i++ )
         NoiseInjectionCompensation1D [i] = 1.f;
