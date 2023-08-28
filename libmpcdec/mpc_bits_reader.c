@@ -104,10 +104,10 @@ static const mpc_uint8_t log2_tab[32] =
 static const mpc_uint8_t log2_lost[32] =
 { 0, 1, 0, 3, 2, 1, 0, 7, 6, 5, 4, 3, 2, 1, 0, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 31};
 
-mpc_int32_t mpc_bits_golomb_dec(mpc_bits_reader * r, const mpc_uint_t k)
+mpc_uint32_t mpc_bits_golomb_dec(mpc_bits_reader * r, const mpc_uint_t k)
 {
 	unsigned int l = 0;
-	unsigned int code = r->buff[0] & ((1 << r->count) - 1);
+	unsigned int code = r->buff[0] & ((1U << r->count) - 1U);
 
 	while( code == 0 ) {
 		l += r->count;
@@ -116,7 +116,7 @@ mpc_int32_t mpc_bits_golomb_dec(mpc_bits_reader * r, const mpc_uint_t k)
 		r->count = 8;
 	}
 
-	while( ((1 << (r->count - 1)) & code) == 0 ) {
+	while( ((1U << (r->count - 1U)) & code) == 0 ) {
 		l++;
 		r->count--;
 	}
@@ -125,12 +125,12 @@ mpc_int32_t mpc_bits_golomb_dec(mpc_bits_reader * r, const mpc_uint_t k)
 	while( r->count < k ) {
 		r->buff++;
 		r->count += 8;
-		code = (code << 8) | r->buff[0];
+		code = (code << 8U) | r->buff[0];
 	}
 
 	r->count -= k;
 
-	return (l << k) | ((code >> r->count) & ((1 << k) - 1));
+	return (l << k) | ((code >> r->count) & ((1U << k) - 1U));
 }
 
 mpc_uint32_t mpc_bits_log_dec(mpc_bits_reader * r, mpc_uint_t max)

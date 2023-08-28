@@ -84,7 +84,7 @@ static mpc_uint32_t
 mpc_demux_fill(mpc_demux * d, mpc_uint32_t min_bytes, int flags)
 {
 	mpc_uint32_t unread_bytes = (mpc_uint32_t) mpc_unread_bytes_unchecked(d);
-	int offset = 0;
+	mpc_uint32_t offset = 0;
 
 	if ((mpc_int32_t) unread_bytes < 0)
 		return 0; // Error - we've been reading past the end of the buffer - abort
@@ -99,8 +99,8 @@ mpc_demux_fill(mpc_demux * d, mpc_uint32_t min_bytes, int flags)
 		mpc_uint32_t bytesread;
 
 		if (flags & MPC_BUFFER_SWAP) {
-			bytes2read &= -1 << 2;
-			offset = (unread_bytes + 3) & ( -1 << 2);
+			bytes2read &= UINT32_MAX << 2U;
+			offset = (unread_bytes + 3U) & ( UINT32_MAX << 2U);
 			offset -= unread_bytes;
 		}
 
@@ -119,7 +119,7 @@ mpc_demux_fill(mpc_demux * d, mpc_uint32_t min_bytes, int flags)
 		}
 		if (flags & MPC_BUFFER_SWAP) {
 			unsigned int i, * tmp = (unsigned int *) (d->buffer + d->bytes_total);
-			for(i = 0 ;i < (bytes2read >> 2); i++)
+			for(i = 0 ;i < (bytes2read >> 2U); i++)
 				tmp[i] = mpc_swap32(tmp[i]);
 		}
 		d->bytes_total += bytesread;
@@ -137,23 +137,22 @@ mpc_demux_fill(mpc_demux * d, mpc_uint32_t min_bytes, int flags)
  */
 static mpc_status
 mpc_demux_seek(mpc_demux * d, mpc_seek_t fpos, mpc_uint32_t min_bytes) {
-	mpc_seek_t start_pos, end_pos;
-	mpc_int_t bit_offset;
+	mpc_uint_t bit_offset;
 
 	// get current buffer position
-	end_pos = ((mpc_seek_t)(d->r->tell(d->r))) << 3;
-	start_pos =	end_pos - (d->bytes_total << 3);
+	mpc_seek_t end_pos = ((mpc_seek_t)(d->r->tell(d->r))) << 3U;
+	mpc_seek_t start_pos =	end_pos - (d->bytes_total << 3U);
 
 	if (fpos >= start_pos && fpos < end_pos) {
-		d->bits_reader.buff = d->buffer + ((fpos - start_pos) >> 3);
-		bit_offset = fpos & 7;
+		d->bits_reader.buff = d->buffer + ((fpos - start_pos) >> 3U);
+		bit_offset = fpos & 7U;
 		d->block_bits = 0;
 		d->block_frames = 0;
 	} else {
-		mpc_seek_t next_pos = fpos >> 3;
+		mpc_seek_t next_pos = fpos >> 3U;
 		if (d->si.stream_version == 7)
-			next_pos = ((next_pos - d->si.header_position) & (-1 << 2)) + d->si.header_position;
-		bit_offset = (int) (fpos - (next_pos << 3));
+			next_pos = ((next_pos - d->si.header_position) & (UINT32_MAX << 2U)) + d->si.header_position;
+		bit_offset = fpos - (next_pos << 3U);
 
 		mpc_demux_clear_buff(d);
 		if (!d->r->seek(d->r, (mpc_int32_t) next_pos))
@@ -161,11 +160,11 @@ mpc_demux_seek(mpc_demux * d, mpc_seek_t fpos, mpc_uint32_t min_bytes) {
 	}
 
 	if (d->si.stream_version == 7)
-		mpc_demux_fill(d, (min_bytes + ((bit_offset + 7) >> 3) + 3) & (~3), MPC_BUFFER_SWAP);
+		mpc_demux_fill(d, (min_bytes + ((bit_offset + 7U) >> 3U) + 3U) & (~3U), MPC_BUFFER_SWAP);
 	else
-		mpc_demux_fill(d, min_bytes + ((bit_offset + 7) >> 3), 0);
-	d->bits_reader.buff += bit_offset >> 3;
-	d->bits_reader.count = 8 - (bit_offset & 7);
+		mpc_demux_fill(d, min_bytes + ((bit_offset + 7U) >> 3U), 0);
+	d->bits_reader.buff += bit_offset >> 3U;
+	d->bits_reader.count = 8 - (bit_offset & 7U);
 
 	return MPC_STATUS_OK;
 }
@@ -179,7 +178,7 @@ mpc_demux_seek(mpc_demux * d, mpc_seek_t fpos, mpc_uint32_t min_bytes) {
 mpc_seek_t mpc_demux_pos(mpc_demux * d)
 {
 	return (((mpc_seek_t)(d->r->tell(d->r)) - d->bytes_total +
-	         d->bits_reader.buff - d->buffer) << 3) + 8 - d->bits_reader.count;
+	         d->bits_reader.buff - d->buffer) << 3U) + 8U - d->bits_reader.count;
 }
 
 /**
@@ -276,37 +275,37 @@ static mpc_status mpc_demux_ST(mpc_demux * d)
 	file_table_size = (mpc_seek_t) tmp;
 	d->seek_pwr = d->si.block_pwr + mpc_bits_read(&r, 4);
 
-	tmp = 2 + d->si.samples / (MPC_FRAME_LENGTH << d->seek_pwr);
+	tmp = 2U + d->si.samples / (MPC_FRAME_LENGTH << d->seek_pwr);
 	while (tmp > MAX_SEEK_TABLE_SIZE) {
 		d->seek_pwr++;
 		diff_pwr++;
-		tmp = 2 + d->si.samples / (MPC_FRAME_LENGTH << d->seek_pwr);
+		tmp = 2U + d->si.samples / (MPC_FRAME_LENGTH << d->seek_pwr);
 	}
 	if ((file_table_size >> diff_pwr) > tmp)
 		file_table_size = tmp << diff_pwr;
 	d->seek_table = malloc((size_t) (tmp * sizeof(mpc_seek_t)));
-	d->seek_table_size = (file_table_size + ((1 << diff_pwr) - 1)) >> diff_pwr;
+	d->seek_table_size = (file_table_size + ((1U << diff_pwr) - 1U)) >> diff_pwr;
 
 	table = d->seek_table;
 	mpc_bits_get_size(&r, &tmp);
-	table[0] = last[0] = (mpc_seek_t) (tmp + d->si.header_position) * 8;
+	table[0] = last[0] = (mpc_seek_t) (tmp + d->si.header_position) * 8U;
 
 	if (d->seek_table_size == 1)
 		return MPC_STATUS_OK;
 
 	mpc_bits_get_size(&r, &tmp);
-	last[1] = (mpc_seek_t) (tmp + d->si.header_position) * 8;
+	last[1] = (mpc_seek_t) (tmp + d->si.header_position) * 8U;
 	if (diff_pwr == 0) table[1] = last[1];
 
-	mask = (1 << diff_pwr) - 1;
+	mask = (1U << diff_pwr) - 1U;
 	for (i = 2; i < file_table_size; i++) {
-		int code = mpc_bits_golomb_dec(&r, 12);
-		if (code & 1)
-			code = -(code & (-1 << 1));
-		code <<= 2;
-		last[i & 1] = code + 2 * last[(i-1) & 1] - last[i & 1];
+		mpc_uint32_t code = mpc_bits_golomb_dec(&r, 12);
+		if (code & 1U)
+			code = -(code & (UINT32_MAX << 1U));
+		code <<= 2U;
+		last[i & 1U] = code + 2U * last[(i-1U) & 1U] - last[i & 1U];
 		if ((i & mask) == 0)
-			table[i >> diff_pwr] = last[i & 1];
+			table[i >> diff_pwr] = last[i & 1U];
 	}
 	return MPC_STATUS_OK;
 }
@@ -364,7 +363,7 @@ static mpc_status mpc_demux_chap_find_inner(mpc_demux * d)
 			if (new_pos <= cur_pos)
 				return MPC_STATUS_FAIL;
 			cur_pos = new_pos;
-			
+
 			MPC_AUTO_FAIL( mpc_demux_seek(d, cur_pos, 11) );
 			size = mpc_bits_get_block(&d->bits_reader, &b);
 		}
@@ -502,8 +501,8 @@ static mpc_status mpc_demux_header(mpc_demux * d)
 				return MPC_STATUS_FAIL;
 			if (b.size > (mpc_uint64_t) DEMUX_BUFFER_SIZE - 11)
 				return MPC_STATUS_FAIL;
-			
-			if (mpc_demux_fill(d, 11 + (mpc_uint32_t) b.size, 0) <= b.size) 
+
+			if (mpc_demux_fill(d, 11 + (mpc_uint32_t) b.size, 0) <= b.size)
 				return MPC_STATUS_FAIL;
 
 			if (memcmp(b.key, "SH", 2) == 0) {
@@ -589,7 +588,7 @@ mpc_status mpc_demux_decode_inner(mpc_demux * d, mpc_frame_info * i)
 					return MPC_STATUS_OK;
 				}
 
-				if (mpc_demux_fill(d, 11 + (mpc_uint32_t) b.size, MPC_BUFFER_FULL) < b.size) 
+				if (mpc_demux_fill(d, 11 + (mpc_uint32_t) b.size, MPC_BUFFER_FULL) < b.size)
 					return MPC_STATUS_FAIL;
 
 				d->bits_reader.buff += b.size;

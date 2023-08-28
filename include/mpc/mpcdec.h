@@ -47,9 +47,9 @@ extern "C" {
 #endif
 
 enum {
-    MPC_FRAME_LENGTH          = (36 * 32),              ///< Samples per mpc frame
-    MPC_DECODER_BUFFER_LENGTH = (MPC_FRAME_LENGTH * 4), ///< Required buffer size for decoder
-    MPC_DECODER_SYNTH_DELAY   = 481
+    MPC_FRAME_LENGTH          = (36U * 32U),             ///< Samples per mpc frame
+    MPC_DECODER_BUFFER_LENGTH = (MPC_FRAME_LENGTH * 4U), ///< Required buffer size for decoder
+    MPC_DECODER_SYNTH_DELAY   = 481U
 };
 
 typedef struct mpc_decoder_t mpc_decoder;
