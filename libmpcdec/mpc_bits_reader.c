@@ -163,7 +163,7 @@ unsigned int mpc_bits_get_size(mpc_bits_reader * r, mpc_uint64_t * p_size)
 
 int mpc_bits_get_block(mpc_bits_reader * r, mpc_block * p_block)
 {
-	int size = 2;
+	mpc_uint64_t size = 2;
 
 	p_block->size = 0;
 	p_block->key[0] = mpc_bits_read(r, 8);
@@ -174,8 +174,5 @@ int mpc_bits_get_block(mpc_bits_reader * r, mpc_block * p_block)
 	if (p_block->size >= size) // check if the block size doesn't conflict with the header size
 		p_block->size -= size;
 
-	return size;
+	return (int)size;
 }
-
-
-
