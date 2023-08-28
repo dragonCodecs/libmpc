@@ -37,12 +37,12 @@
 #include "internal.h"
 #include <stdio.h>
 
-#define STDIO_MAGIC 0xF34B963C ///< Just a random safe-check value...
+#define STDIO_MAGIC 0xF34B963CU ///< Just a random safe-check value...
 typedef struct mpc_reader_stdio_t {
-    FILE       *p_file;
-    int         file_size;
-    mpc_bool_t  is_seekable;
-    mpc_int32_t magic;
+    FILE        *p_file;
+    int          file_size;
+    mpc_bool_t   is_seekable;
+    mpc_uint32_t magic;
 } mpc_reader_stdio;
 
 /// mpc_reader callback implementations
@@ -141,4 +141,3 @@ mpc_reader_exit_stdio(mpc_reader *p_reader)
     free(p_stdio);
     p_reader->data = NULL;
 }
-
