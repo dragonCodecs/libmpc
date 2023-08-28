@@ -667,7 +667,6 @@ SCF_Extraktion ( PsyModel*m, mpc_encoder_t* e, const int MaxBand, SubbandFloatTy
                 }
             }
     }
-    return;
 }
 
 
@@ -706,7 +705,6 @@ Quantisierung ( PsyModel * m,
             }
         }
     }
-    return;
 }
 
 
@@ -799,7 +797,6 @@ Allocate ( const int MaxBand, int* res, float* x, int* scf, const float* comp, c
         }
 
     }
-    return;
 }
 
 
@@ -1537,8 +1534,8 @@ mainloop ( int argc, char** argv )
 
     // initialize tables which must be initialized once and only once
 
-	m.SCF_Index_L = (int*) e.SCF_Index_L;
-	m.SCF_Index_R = (int*) e.SCF_Index_R;
+	m.SCF_Index_L = e.SCF_Index_L;
+	m.SCF_Index_R = e.SCF_Index_R;
 
 	Init_Psychoakustik (&m);
 	Init_FPU ();

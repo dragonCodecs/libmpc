@@ -270,8 +270,6 @@ FindOptimalANS ( const int             MaxBand,
             }
         }
     }
-
-    return;
 }
 
 
@@ -293,8 +291,6 @@ NS_Analyse ( PsyModel* m,
 	memset ( m->FIR_R,      0, sizeof m->FIR_R      );         // reset FIR
 	memset ( m->NS_Order_R, 0, sizeof m->NS_Order_R );         // reset Flags
 	FindOptimalANS ( MaxBand, MSflag, ANSspec_R, ANSspec_S, m->NS_Order_R, m->SNR_comp_R, m->FIR_R, smr.R, smr.S, m->SCF_Index_R, Transient );
-
-    return;
 }
 
 /* end of ans.c */
