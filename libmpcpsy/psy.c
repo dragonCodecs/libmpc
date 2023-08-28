@@ -823,7 +823,7 @@ CalculateSMR ( const int     MaxBand,
 //         Energy of the last short block *preerg in short partitions
 static void
 CalcShortThreshold ( PsyModel* m,
-					 const float  erg [4] [128],
+					 const float  (*const erg) [128],
                      const float  ShortThr,
                      float*       thr,
                      float        old_erg [2][PART_SHORT],
