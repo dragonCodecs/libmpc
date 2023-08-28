@@ -189,7 +189,7 @@ mpc_status add_chaps_cue(char * mpc_file, char * chap_file, mpc_demux * demux, m
 
 	nchap = cd_get_ntrack(cd);
 	for (i = 1; i <= nchap; i++) {
-		char track_buf[16], block_header[12] = "CT", sample_offset[10];
+		char track_buf[22], block_header[12] = "CT", sample_offset[10];
 		int j, nitem = 0, tag_len = 0, key_len, item_len, offset_size;
 		Track * track;
 		Cdtext *cdtext;
@@ -207,7 +207,7 @@ mpc_status add_chaps_cue(char * mpc_file, char * chap_file, mpc_demux * demux, m
 
 		Init_Tags();
 
-		sprintf(track_buf, "%i/%i", i, nchap);
+		snprintf(track_buf, sizeof(track_buf), "%i/%i", i, nchap);
 		key_len = 5;
 		item_len = strlen(track_buf);
 		addtag("Track", key_len, track_buf, item_len, 0, 0);
