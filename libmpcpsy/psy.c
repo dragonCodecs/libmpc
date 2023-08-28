@@ -167,8 +167,6 @@ void Init_Psychoakustik ( PsyModel* m)
 				tmp_Mask_L [i]   = tmp_Mask_R [i]   =
 				PreThr_L   [i]   = PreThr_R   [i]   = partLtq [i];
 	}
-
-    return;
 }
 
 
@@ -196,8 +194,6 @@ void RaiseSMR (PsyModel* m, const int MaxBand, SMRTyp* smr )
     RaiseSMR_Signal ( MaxBand, smr->R, tmp );
     RaiseSMR_Signal ( MaxBand, smr->M, tmp );
     RaiseSMR_Signal ( MaxBand, smr->S, 0.5 * tmp );
-
-    return;
 }
 
 // input : *smr
@@ -246,8 +242,6 @@ MS_LR_Entscheidung ( const int MaxBand, unsigned char* ms, SMRTyp* smr, SubbandF
             ms[Band] = 0;
         }
     }
-
-    return;
 }
 
 // input : FFT-spectrums *spec0 und *spec1
@@ -261,7 +255,7 @@ SubbandEnergy ( const int     MaxBand,
                 const float*  spec0,
                 const float*  spec1 )
 {
-    int    n;
+    mpc_uint_t n;
     int    k;
     int    alias;
     float  tmp0;
@@ -272,27 +266,25 @@ SubbandEnergy ( const int     MaxBand,
 
     for ( k = 0; k <= MaxBand; k++ ) {                  // subband index
         tmp0 = tmp1 = 0.f;
-        for ( n = 0; n < 16; n++, spec0++, spec1++ ) {  // spectral index
+        for ( n = 0U; n < 16U; n++, spec0++, spec1++ ) {  // spectral index
             tmp0 += *spec0;
             tmp1 += *spec1;
 
             // Consideration of Aliasing between the subbands
-            if      ( n <   +sizeof(Butfly)/sizeof(*Butfly)  &&  k !=  0 ) {
-                alias = -1 - (n<<1);
+            if      ( n <   sizeof(Butfly)/sizeof(*Butfly)  &&  k !=  0 ) {
+                alias = -1 - (n<<1U);
                 tmp0 += Butfly [n]    * (spec0[alias] - *spec0);
                 tmp1 += Butfly [n]    * (spec1[alias] - *spec1);
             }
-            else if ( n > 15-sizeof(Butfly)/sizeof(*Butfly)  &&  k != 31 ) {
-                alias = 31 - (n<<1);
-                tmp0 += Butfly [15-n] * (spec0[alias] - *spec0);
-                tmp1 += Butfly [15-n] * (spec1[alias] - *spec1);
+            else if ( n > 15U-sizeof(Butfly)/sizeof(*Butfly)  &&  k != 31 ) {
+                alias = 31 - (n<<1U);
+                tmp0 += Butfly [15U-n] * (spec0[alias] - *spec0);
+                tmp1 += Butfly [15U-n] * (spec1[alias] - *spec1);
             }
         }
         *erg0++ = tmp0;
         *erg1++ = tmp1;
     }
-
-    return;
 }
 
 // input : FFT-Spectrums *spec0 and *spec1
@@ -445,8 +437,6 @@ AdaptThresholds ( const int MaxLine, float* shaped0, float* shaped1 )
         *shaped0++ = tmp0;
         *shaped1++ = tmp1;
     }
-
-    return;
 }
 
 
@@ -489,8 +479,6 @@ CalcUnpred (PsyModel* m,
             if ( *vocal != 0  &&  *cw > CVD_UNPRED * 0.01 * *vocal )
                 *cw = CVD_UNPRED * 0.01 * *vocal;
     }
-
-    return;
 }
 #undef amp1
 #undef amp2
@@ -526,8 +514,6 @@ SpreadingSignal ( const float* erg, const float* werg, float* res,
             wres[n] += *sprd * ew;      // spreading weighted signal
         }
     }
-
-    return;
 }
 
 // input : spread weighted energy *werg, spread energy *erg
@@ -554,8 +540,6 @@ ApplyTonalityOffset ( float* erg0, float* erg1, const float* werg0, const float*
         else                             Offset = O_MIN;
 		*erg1++ *= iw[n] * minf(MinVal[n], Offset);
     }
-
-    return;
 }
 
 // input: previous loudness *loud, energies *erg, threshold in quiet *adapted_ltq
@@ -609,8 +593,6 @@ CalcTemporalThreshold ( float* a, float* b, float* tau, float* frqthr, float* tm
         // use post-masking of (Re-Normalization)
 		tmpthr[n] = maxf (frqthr[n], tmp) * partLtq[n];
     }
-
-    return;
 }
 
 // input : L/R-Masking thresholds in Partitions *thrL, *thrR
@@ -769,8 +751,6 @@ CalcMSThreshold ( PsyModel* m,
             break;
         }
     }
-
-    return;
 }
 
 // input : Masking thresholds in Partitions *partThr0, *partThr1
@@ -834,8 +814,6 @@ CalculateSMR ( const int     MaxBand,
         *smr0++ = 0.0625f * *erg0++ / tmp0;
         *smr1++ = 0.0625f * *erg1++ / tmp1;
     }
-
-    return;
 }
 
 // input : energy spectrums erg[4][128] (4 delayed FFTs)
@@ -887,8 +865,6 @@ CalcShortThreshold ( PsyModel* m,
         }
         thr [k] = th * ShortThr * *iwidth++;  // pull out and multiply only when transient[k]=1
     }
-
-    return;
 }
 
 // input : previous simultaneous masking threshold *preThr,
@@ -911,7 +887,6 @@ PreechoControl ( float*        partThr0,
         *preThr0++  = *simThr0++;
         *preThr1++  = *simThr1++;
     }
-    return;
 }
 
 
