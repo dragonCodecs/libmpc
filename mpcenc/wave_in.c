@@ -297,24 +297,24 @@ Read_WAV_Samples ( wave_t*          t,
 
 // read WAVE header
 
-static unsigned short
+static mpc_uint16_t
 Read16 ( FILE* fp )
 {
     unsigned char  buff [2];
 
     if (fread ( buff, 1, 2, fp ) != 2 )
-        return -1;
-    return buff[0] | (buff[1] << 8);
+        return UINT16_MAX;
+    return buff[0] | (buff[1] << 8U);
 }
 
-static unsigned long
+static mpc_uint32_t
 Read32 ( FILE* fp )
 {
     unsigned char  buff [4];
 
     if ( fread ( buff, 1, 4, fp ) != 4 )
-        return -1;
-    return (buff[0] | (buff[1] << 8)) | ((unsigned long)(buff[2] | (buff[3] << 8)) << 16);
+        return UINT32_MAX;
+    return (buff[0] | (buff[1] << 8U)) | ((mpc_uint32_t)(buff[2] | (buff[3] << 8U)) << 16U);
 }
 
 
@@ -330,8 +330,8 @@ Read_WAV_Header ( wave_t* type )
 
     fseek ( fp, 0, SEEK_SET );
     if ( Read32 (fp) != 0x46464952 ) {                  // 4 Byte: check for "RIFF"
-        stderr_printf ( Read32(fp) == -1  ?  " ERROR: Empty file or no data from coprocess!\n\n"
-                                          :  " ERROR: 'RIFF' not found in WAVE header!\n\n");
+        stderr_printf ( Read32(fp) == UINT32_MAX ? " ERROR: Empty file or no data from coprocess!\n\n"
+                                                 :  " ERROR: 'RIFF' not found in WAVE header!\n\n");
         return -1;
     }
     Read32 (fp);                                        // 4 Byte: chunk size (ignored)
