@@ -107,10 +107,10 @@ mpc_status add_chaps_ini(char * mpc_file, char * chap_file, mpc_demux * demux, m
 		int j, nitem, ntags = 0, tag_len = 0, offset_size;
 		mpc_uint16_t gain = 0, peak = 0;
 		char * chap_sec = iniparser_getsecname(dict, i), block_header[12] = "CT", sample_offset[10];
-		mpc_int64_t chap_pos = atoll(chap_sec);
+		mpc_uint64_t chap_pos = (mpc_uint64_t)atoll(chap_sec);
 
 		if (chap_pos > si->samples - si->beg_silence)
-            fprintf(stderr, "warning : chapter %i starts @ %" PRId64 " samples after the end of the stream (%" PRId64 ")\n",
+            fprintf(stderr, "warning : chapter %i starts @ %" PRIu64 " samples after the end of the stream (%" PRId64 ")\n",
                     i + 1, chap_pos, si->samples - si->beg_silence);
 
 		Init_Tags();
@@ -190,19 +190,20 @@ mpc_status add_chaps_cue(char * mpc_file, char * chap_file, mpc_demux * demux, m
 	nchap = cd_get_ntrack(cd);
 	for (i = 1; i <= nchap; i++) {
 		char track_buf[22], block_header[12] = "CT", sample_offset[10];
-		int j, nitem = 0, tag_len = 0, key_len, item_len, offset_size;
+		size_t j;
+		int nitem = 0, tag_len = 0, key_len, item_len, offset_size;
 		Track * track;
 		Cdtext *cdtext;
-		mpc_int64_t chap_pos;
+		mpc_uint64_t chap_pos;
 
 		track = cd_get_track (cd, i);
 		cdtext = track_get_cdtext(track);
 
 		// position du chapitre
-		chap_pos = (mpc_int64_t) si->sample_freq * track_get_start (track) / 75;
+		chap_pos = si->sample_freq * (mpc_uint64_t)track_get_start (track) / 75U;
 
 		if (chap_pos > si->samples - si->beg_silence)
-            fprintf(stderr, "warning : chapter %i starts @ %" PRId64 " samples after the end of the stream (%" PRId64 ")\n",
+            fprintf(stderr, "warning : chapter %i starts @ %" PRIu64 " samples after the end of the stream (%" PRIu64 ")\n",
 			        i, chap_pos, si->samples - si->beg_silence);
 
 		Init_Tags();
