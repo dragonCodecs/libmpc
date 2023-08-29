@@ -109,7 +109,7 @@ main(int argc, char **argv)
 		if (samples[0] != samples[1] || samples[0] == 0)
 			break;
 
-		int i = 0;
+		unsigned int i = 0;
 		for( ; i < samples[0]; i++) {
 			sample_buff[0][i] -= sample_buff[1][i];
 			if (sample_buff[0][i]) {
@@ -120,7 +120,7 @@ main(int argc, char **argv)
 		total_samples += samples[0];
 
 		if(is_wav_output)
-			if(waveformat_output_process_int16(&wav_output, sample_buff[0], samples[0]) < 0)
+			if(waveformat_output_process_int16(&wav_output, sample_buff[0], samples[0]) == 0)
 				break;
 	}
 
