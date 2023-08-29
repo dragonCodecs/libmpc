@@ -127,7 +127,7 @@ int main(int argc, char **argv)
 		end_sample += si.beg_silence;
 	start_sample += si.beg_silence;
 
-	if (start_sample < 0 || end_sample > si.samples || end_sample <= start_sample) {
+	if (start_sample < 0 || (mpc_uint64_t)end_sample > si.samples || end_sample <= start_sample) {
 		fprintf(stderr, "specified samples bounds out of stream bounds\n");
 		exit(!MPC_STATUS_OK);
 	}
