@@ -46,7 +46,7 @@ main(int argc, char **argv)
 	int err;
 	int total_samples, total_diff;
 
-	if(4 < argc && argc < 3)
+	if (argc < 3 || argc > 4)
 	{
 		usage(argv[0]);
 		return 0;
@@ -56,13 +56,13 @@ main(int argc, char **argv)
 	memset(&wav_in_1, 0, sizeof wav_in_1);
 	wavi_fc.m_read      = wav_read;
 	wavi_fc.m_user_data = fopen(argv[1], "rb");
-	if(!wavi_fc.m_user_data) return 1;
+	if (!wavi_fc.m_user_data) return 1;
 	if (! waveformat_input_open(&wav_in_1, wavi_fc)) return 1;
 
 	memset(&wav_in_2, 0, sizeof wav_in_2);
 	wavi_fc.m_read      = wav_read;
 	wavi_fc.m_user_data = fopen(argv[2], "rb");
-	if(!wavi_fc.m_user_data) return 1;
+	if (!wavi_fc.m_user_data) return 1;
 	if (! waveformat_input_open(&wav_in_2, wavi_fc)) return 1;
 
 	if (wav_in_1.m_channels != wav_in_2.m_channels) {
