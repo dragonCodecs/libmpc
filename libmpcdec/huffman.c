@@ -42,7 +42,7 @@ static const mpc_huffman mpc_table_HuffHdr [10] = {
 	{0x5d00, 9, 4}, {0x5c00, 8, -5}, {0x5800, 6, 2}, {0x5000, 5, -3},
 	{0x4000, 4, -2}, {0x0, 2, -1}
 };
-mpc_lut_data mpc_HuffHdr = {mpc_table_HuffHdr, {}};
+mpc_lut_data mpc_HuffHdr = {mpc_table_HuffHdr, {{0}}};
 
 const mpc_huffman mpc_table_HuffSCFI [4] = {
 	{0x8000, 1, 1}, {0x6000, 3, 2}, {0x4000, 3, 0}, {0x0, 2, 3}
@@ -54,7 +54,7 @@ static const mpc_huffman mpc_table_HuffDSCF [16] = {
 	{0x8400, 6, 7}, {0x8000, 6, -7}, {0x6000, 3, -1}, {0x4000, 3, 2},
 	{0x3000, 4, 4}, {0x2800, 5, 6}, {0x2000, 5, -6}, {0x0, 3, -2}
 };
-mpc_lut_data mpc_HuffDSCF = {mpc_table_HuffDSCF, {}};
+mpc_lut_data mpc_HuffDSCF = {mpc_table_HuffDSCF, {{0}}};
 
 static const mpc_huffman mpc_table_HuffQ1 [2] [27] = {
 	{
@@ -187,13 +187,13 @@ static const mpc_huffman mpc_table_HuffQ7 [2] [63] = {
 };
 
 mpc_lut_data mpc_HuffQ [7] [2] = {
-	{{mpc_table_HuffQ1[0], {}}, {mpc_table_HuffQ1[1], {}}},
-	{{mpc_table_HuffQ2[0], {}}, {mpc_table_HuffQ2[1], {}}},
-	{{mpc_table_HuffQ3[0], {}}, {mpc_table_HuffQ3[1], {}}},
-	{{mpc_table_HuffQ4[0], {}}, {mpc_table_HuffQ4[1], {}}},
-	{{mpc_table_HuffQ5[0], {}}, {mpc_table_HuffQ5[1], {}}},
-	{{mpc_table_HuffQ6[0], {}}, {mpc_table_HuffQ6[1], {}}},
-	{{mpc_table_HuffQ7[0], {}}, {mpc_table_HuffQ7[1], {}}}
+	{{mpc_table_HuffQ1[0], {{0}}}, {mpc_table_HuffQ1[1], {{0}}}},
+	{{mpc_table_HuffQ2[0], {{0}}}, {mpc_table_HuffQ2[1], {{0}}}},
+	{{mpc_table_HuffQ3[0], {{0}}}, {mpc_table_HuffQ3[1], {{0}}}},
+	{{mpc_table_HuffQ4[0], {{0}}}, {mpc_table_HuffQ4[1], {{0}}}},
+	{{mpc_table_HuffQ5[0], {{0}}}, {mpc_table_HuffQ5[1], {{0}}}},
+	{{mpc_table_HuffQ6[0], {{0}}}, {mpc_table_HuffQ6[1], {{0}}}},
+	{{mpc_table_HuffQ7[0], {{0}}}, {mpc_table_HuffQ7[1], {{0}}}}
 };
 
 
@@ -427,12 +427,12 @@ mpc_can_data mpc_can_Q9up = {mpc_huff_Q9up, mpc_sym_Q9up};
 
 
 mpc_can_data mpc_can_Q [6][2] = {
-	{{mpc_huff_Q2_1, mpc_sym_Q2_1, {}}, {mpc_huff_Q2_2, mpc_sym_Q2_2, {}}},
-	{{mpc_huff_Q3, mpc_sym_Q3, {}},     {mpc_huff_Q4, mpc_sym_Q4, {}}},
-	{{mpc_huff_Q5_1, mpc_sym_Q5_1, {}}, {mpc_huff_Q5_2, mpc_sym_Q5_2, {}}},
-	{{mpc_huff_Q6_1, mpc_sym_Q6_1, {}}, {mpc_huff_Q6_2, mpc_sym_Q6_2, {}}},
-	{{mpc_huff_Q7_1, mpc_sym_Q7_1, {}}, {mpc_huff_Q7_2, mpc_sym_Q7_2, {}}},
-	{{mpc_huff_Q8_1, mpc_sym_Q8_1, {}}, {mpc_huff_Q8_2, mpc_sym_Q8_2, {}}}
+	{{mpc_huff_Q2_1, mpc_sym_Q2_1, {{0}}}, {mpc_huff_Q2_2, mpc_sym_Q2_2, {{0}}}},
+	{{mpc_huff_Q3, mpc_sym_Q3, {{0}}},     {mpc_huff_Q4, mpc_sym_Q4, {{0}}}},
+	{{mpc_huff_Q5_1, mpc_sym_Q5_1, {{0}}}, {mpc_huff_Q5_2, mpc_sym_Q5_2, {{0}}}},
+	{{mpc_huff_Q6_1, mpc_sym_Q6_1, {{0}}}, {mpc_huff_Q6_2, mpc_sym_Q6_2, {{0}}}},
+	{{mpc_huff_Q7_1, mpc_sym_Q7_1, {{0}}}, {mpc_huff_Q7_2, mpc_sym_Q7_2, {{0}}}},
+	{{mpc_huff_Q8_1, mpc_sym_Q8_1, {{0}}}, {mpc_huff_Q8_2, mpc_sym_Q8_2, {{0}}}}
 };
 
 static void huff_fill_lut(const mpc_huffman * table, mpc_huff_lut * lut, const int bits)
