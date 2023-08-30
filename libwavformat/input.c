@@ -445,8 +445,9 @@ t_wav_uint32 waveformat_input_process_int16(t_wav_input_file * p_file,t_wav_int1
 	return samples_read;
 }
 
-void waveformat_input_close(t_wav_input_file * /*p_file*/)
+void waveformat_input_close(t_wav_input_file * p_file)
 {
+	(void)p_file;
 }
 
 t_wav_uint32 waveformat_input_query_sample_rate(t_wav_input_file * p_file)
