@@ -1692,8 +1692,8 @@ mainloop ( int argc, char** argv )
         /********************************************************************/
         // you only get null samples at the output of the filterbank when the last frame contains zeroes
 
-		memset ( e.Res_L, 0, sizeof e.Res_L );
-		memset ( e.Res_R, 0, sizeof e.Res_R );
+        memset ( e.Res_L, 0, sizeof e.Res_L );
+        memset ( e.Res_R, 0, sizeof e.Res_R );
 
         if ( !Silence  ||  !OldSilence ) {
             Analyse_Filter ( &Main, X, m.Max_Band );                      // Analysis-Filterbank (Main -> X)
