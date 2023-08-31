@@ -104,8 +104,8 @@ static int raw_output_float32(FILE * file, float * buff, int cnt, mpc_bool_t rev
 	for (i = 0; i < cnt; i++) {
 		int tmp = nearbyintf(buff[i] * (1U << 15U));
 		short out;
-		if (tmp > ((1U << 15U) - 1U))
-			tmp = ((1U << 15U) - 1U);
+		if (tmp > (int)((1U << 15U) - 1U))
+			tmp = (int)((1U << 15U) - 1U);
 		if (tmp < -(int)(1U << 15U))
 			tmp = -(int)(1U << 15U);
 		if (reverse_endian)
