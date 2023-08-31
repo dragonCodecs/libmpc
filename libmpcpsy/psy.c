@@ -403,7 +403,7 @@ static void
 AdaptThresholds ( const int MaxLine, float* shaped0, float* shaped1 )
 {
     int           n;
-    int           mod;
+    unsigned int  mod;
     int           alias;
     float         tmp;
     const float*  invb = InvButfly;
@@ -416,18 +416,18 @@ AdaptThresholds ( const int MaxLine, float* shaped0, float* shaped1 )
     // should be able to optimize it with coasting.  [ 9 ] + n * [ 7 + 7 + 2 ] + [ 7 ]
     //                                                    Schleife    Schl Schl Ausr  Schleife
     for ( n = 0; n < MaxLine; n++, thr0++, thr1++ ) {
-        mod  = n & 15;  // n%16
+        mod  = (unsigned int)n & 15U;  // n%16
         tmp0 = *thr0;
         tmp1 = *thr1;
 
-        if      ( mod <   +sizeof(InvButfly)/sizeof(*InvButfly)  &&  n >  12 ) {
+        if      ( mod <   sizeof(InvButfly)/sizeof(*InvButfly)  &&  n >  12 ) {
             alias = -1 - (mod<<1);
             tmp   = thr0[alias] * invb[mod];
             if ( tmp < tmp0 ) tmp0 = tmp;
             tmp   = thr1[alias] * invb[mod];
             if ( tmp < tmp1 ) tmp1 = tmp;
         }
-        else if ( mod > 15-sizeof(InvButfly)/sizeof(*InvButfly)  &&  n < 499 ) {
+        else if ( mod > 15U-sizeof(InvButfly)/sizeof(*InvButfly)  &&  n < 499 ) {
             alias = 31 - (mod<<1);
             tmp   = thr0[alias] * invb[15-mod];
             if ( tmp < tmp0 ) tmp0 = tmp;
