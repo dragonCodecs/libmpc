@@ -210,7 +210,7 @@ static const mpc_huffman mpc_huff_SCFI_2 [5] = {
 static const mpc_int8_t mpc_sym_SCFI_2 [16] = {
 	15, 10, 14, 11, 13, 9, 7, 6, 5, 12, 8, 3, 2, 0, 4, 1
 };
-mpc_can_data mpc_can_SCFI[2] = {{mpc_huff_SCFI_1, mpc_sym_SCFI_1}, {mpc_huff_SCFI_2, mpc_sym_SCFI_2}};
+mpc_can_data mpc_can_SCFI[2] = {{mpc_huff_SCFI_1, mpc_sym_SCFI_1, {{0}}}, {mpc_huff_SCFI_2, mpc_sym_SCFI_2, {{0}}}};
 
 static const mpc_huffman mpc_huff_DSCF_1 [12] = {
 	{0xa000, 3, 7}, {0x4000, 4, 12}, {0x2800, 5, 16}, {0x1800, 6, 21},
@@ -218,7 +218,10 @@ static const mpc_huffman mpc_huff_DSCF_1 [12] = {
 	{0x80, 11, 53}, {0x30, 12, 57}, {0x18, 13, 60}, {0x0, 14, 63}
 }; // 12
 static const mpc_int8_t mpc_sym_DSCF_1 [64] = {
-	35, 34, 33, 36, 32, 30, 29, 27, 26, 37, 28, 25, 39, 38, 24, 23, 40, 22, 21, 20, 19, 43, 42, 41, 18, 17, 16, 15, 46, 45, 44, 14, 13, 12, 11, 49, 48, 47, 31, 10, 9, 8, 7, 6, 52, 51, 50, 5, 4, 3, 54, 53, 2, 1, 0, 57, 56, 55, 63, 62, 61, 60, 59, 58
+	35, 34, 33, 36, 32, 30, 29, 27, 26, 37, 28, 25, 39, 38, 24, 23,
+	40, 22, 21, 20, 19, 43, 42, 41, 18, 17, 16, 15, 46, 45, 44, 14,
+	13, 12, 11, 49, 48, 47, 31, 10, 9, 8, 7, 6, 52, 51, 50, 5,
+	4, 3, 54, 53, 2, 1, 0, 57, 56, 55, 63, 62, 61, 60, 59, 58
 };
 static const mpc_huffman mpc_huff_DSCF_2 [13] = {
 	{0x6000, 3, 7}, {0x3000, 4, 10}, {0x1800, 5, 13}, {0x1000, 6, 16},
@@ -226,9 +229,12 @@ static const mpc_huffman mpc_huff_DSCF_2 [13] = {
 	{0xe0, 11, 45}, {0x50, 12, 52}, {0x20, 13, 57}, {0xc, 14, 61}, {0x0, 15, 64}
 }; // 13
 static const mpc_int8_t mpc_sym_DSCF_2 [65] = {
-	33, 32, 31, 30, 29, 34, 28, 27, 36, 35, 26, 37, 25, 38, 24, 23, 40, 39, 22, 21, 42, 41, 20, 19, 18, 45, 44, 43, 17, 16, 15, 14, 48, 47, 46, 13, 12, 11, 10, 64, 52, 51, 50, 49, 9, 8, 7, 6, 55, 54, 53, 5, 4, 3, 58, 57, 56, 2, 1, 63, 62, 61, 60, 59, 0
+	33, 32, 31, 30, 29, 34, 28, 27, 36, 35, 26, 37, 25, 38, 24, 23,
+	40, 39, 22, 21, 42, 41, 20, 19, 18, 45, 44, 43, 17, 16, 15, 14,
+	48, 47, 46, 13, 12, 11, 10, 64, 52, 51, 50, 49, 9, 8, 7, 6,
+	55, 54, 53, 5, 4, 3, 58, 57, 56, 2, 1, 63, 62, 61, 60, 59, 0
 };
-mpc_can_data mpc_can_DSCF[2] = {{mpc_huff_DSCF_1, mpc_sym_DSCF_1}, {mpc_huff_DSCF_2, mpc_sym_DSCF_2}};
+mpc_can_data mpc_can_DSCF[2] = {{mpc_huff_DSCF_1, mpc_sym_DSCF_1, {{0}}}, {mpc_huff_DSCF_2, mpc_sym_DSCF_2, {{0}}}};
 
 static const mpc_huffman mpc_huff_Bands [12] = {
 	{0x8000, 1, 1}, {0x4000, 2, 2}, {0x2000, 3, 3}, {0x1000, 5, 6},
@@ -238,7 +244,7 @@ static const mpc_huffman mpc_huff_Bands [12] = {
 static const mpc_int8_t mpc_sym_Bands [33] = {
 	0, 32, 1, 31, 2, 30, 3, 4, 29, 6, 5, 28, 7, 27, 26, 8, 25, 24, 23, 9, 22, 21, 20, 18, 17, 16, 15, 14, 12, 11, 10, 19, 13
 };
-mpc_can_data mpc_can_Bands = {mpc_huff_Bands, mpc_sym_Bands};
+mpc_can_data mpc_can_Bands = {mpc_huff_Bands, mpc_sym_Bands, {{0}}};
 
 static const mpc_huffman mpc_huff_Res_1 [16] = {
 	{0x8000, 1, 1}, {0x4000, 2, 2}, {0x2000, 3, 3}, {0x1000, 4, 4},
@@ -257,7 +263,7 @@ static const mpc_huffman mpc_huff_Res_2 [12] = {
 static const mpc_int8_t mpc_sym_Res_2 [17] = {
 	16, 1, 0, 2, 15, 3, 14, 4, 5, 13, 6, 12, 7, 11, 10, 9, 8
 };
-mpc_can_data mpc_can_Res[2] = {{mpc_huff_Res_1, mpc_sym_Res_1}, {mpc_huff_Res_2, mpc_sym_Res_2}};
+mpc_can_data mpc_can_Res[2] = {{mpc_huff_Res_1, mpc_sym_Res_1, {{0}}}, {mpc_huff_Res_2, mpc_sym_Res_2, {{0}}}};
 
 static const mpc_huffman mpc_huff_Q1 [10] = {
 	{0x6000, 3, 7}, {0x1000, 4, 10}, {0x800, 5, 11}, {0x400, 6, 12},
@@ -267,7 +273,7 @@ static const mpc_huffman mpc_huff_Q1 [10] = {
 static const mpc_int8_t mpc_sym_Q1 [19] = {
 	7, 6, 5, 4, 3, 10, 9, 8, 2, 1, 11, 0, 12, 13, 14, 15, 16, 18, 17
 };
-mpc_can_data mpc_can_Q1 = {mpc_huff_Q1, mpc_sym_Q1};
+mpc_can_data mpc_can_Q1 = {mpc_huff_Q1, mpc_sym_Q1, {{0}}};
 
 static const mpc_huffman mpc_huff_Q2_1 [10] = {
 	{0xe000, 3, 7}, {0x8000, 4, 14}, {0x3c00, 6, 38}, {0x2a00, 7, 53},
@@ -423,7 +429,7 @@ static const mpc_int8_t mpc_sym_Q9up [256] = {
 	30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 18, 17, 16, 15, 14, 13, 12, 11, 10,
 	9, 8, 7, 6, 5, -3, -4, -5, -6, 4, 3, 2, 1, 0, -1, -2
 };
-mpc_can_data mpc_can_Q9up = {mpc_huff_Q9up, mpc_sym_Q9up};
+mpc_can_data mpc_can_Q9up = {mpc_huff_Q9up, mpc_sym_Q9up, {{0}}};
 
 
 mpc_can_data mpc_can_Q [6][2] = {
