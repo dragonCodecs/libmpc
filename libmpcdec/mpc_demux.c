@@ -34,6 +34,7 @@
 
 #include <math.h>
 #include <string.h>
+#include <stdint.h>
 #include <mpc/streaminfo.h>
 #include <mpc/mpcdec.h>
 #include <mpc/minimax.h>
