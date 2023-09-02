@@ -3,6 +3,9 @@
 project(
 	'libmpc',
 	'c',
+	default_options: [
+		'c_std=c99',
+	],
 	version: '7.0.1',
 	meson_version: '>= 0.63',
 	subproject_dir: 'deps'
