@@ -17,6 +17,7 @@
  * License along with this library; If not, see <http://www.gnu.org/licenses/>
  */
 
+#include <stdint.h>
 #include <string.h>
 #ifndef _MSC_VER
 #include <strings.h>
