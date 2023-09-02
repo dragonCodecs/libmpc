@@ -20,6 +20,13 @@
 #ifndef MPCENC_MPCENC_H
 #define MPCENC_MPCENC_H
 
+#ifndef _GNU_SOURCE
+# define _GNU_SOURCE
+#endif
+#ifndef _DEFAULT_SOURCE
+# define _DEFAULT_SOURCE
+#endif
+
 #include "libmpcenc.h"
 #include "libmpcpsy.h"
 #include <mpc/datatypes.h>

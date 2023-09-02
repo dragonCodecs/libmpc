@@ -17,6 +17,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+#define _GNU_SOURCE
+#define _DEFAULT_SOURCE
 #include <mpc/mpcdec.h>
 #include "../libmpcdec/internal.h"
 #include "../libmpcenc/libmpcenc.h"
@@ -42,6 +44,10 @@ int     addtag           ( const char* key, size_t keylen, const char* value,
 # define atoll		_atoi64
 # define ftruncate	chsize
 # define strcasecmp stricmp
+#else
+# include <strings.h>
+# include <unistd.h>
+# include <sys/types.h>
 #endif
 
 #define MPCCHAP_MAJOR 0

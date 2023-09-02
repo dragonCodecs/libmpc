@@ -27,6 +27,8 @@
 
 #ifdef _WIN32
 # include <windows.h>
+#else
+# include <strings.h>
 #endif
 
 #ifdef _MSC_VER

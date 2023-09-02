@@ -17,7 +17,10 @@
  * License along with this library; If not, see <http://www.gnu.org/licenses/>
  */
 
-# include <string.h>
+#include <string.h>
+#ifndef _MSC_VER
+#include <strings.h>
+#endif
 #include "mpcenc.h"
 
 #ifdef _WIN32

@@ -16,6 +16,8 @@
  *    -
  */
 
+#define _GNU_SOURCE
+#define _DEFAULT_SOURCE
 #include <mpc/mpc_types.h>
 #include <ctype.h>
 

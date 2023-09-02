@@ -22,6 +22,9 @@
 #include <memory.h>
 #include <time.h>
 #include <errno.h>
+#ifndef _MSC_VER
+# include <strings.h>
+#endif
 
 #include "mpcenc.h"
 #include <mpc/mpcmath.h>
